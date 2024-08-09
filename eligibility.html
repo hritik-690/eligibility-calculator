@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eligibility Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Eligibility Calculator</h2>
+        <form id="eligibilityForm">
+            <label for="netSalary">Net Salary (₹):</label>
+            <input type="number" id="netSalary" name="netSalary" required>
+
+            <label for="totalLoanEMI">Total Loan EMI (₹):</label>
+            <input type="number" id="totalLoanEMI" name="totalLoanEMI" required>
+
+            <label for="creditCardOutstanding">Total Outstanding Credit Card Balance (₹):</label>
+            <input type="number" id="creditCardOutstanding" name="creditCardOutstanding" required>
+
+            <button type="button" onclick="calculateEligibility()">Calculate Eligibility</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function calculateEligibility() {
+            // Get the form values
+            let netSalary = parseFloat(document.getElementById('netSalary').value);
+            let totalLoanEMI = parseFloat(document.getElementById('totalLoanEMI').value);
+            let creditCardOutstanding = parseFloat(document.getElementById('creditCardOutstanding').value);
+
+            // Initialize eligibleSalaryPercent
+            let eligibleSalaryPercent = 0;
+
+            // Calculate the eligible salary percentage based on net salary
+            if (netSalary >= 25000 && netSalary <= 40000) {
+                eligibleSalaryPercent = netSalary * 0.55;
+            } else if (netSalary >= 40001 && netSalary <= 50000) {
+                eligibleSalaryPercent = netSalary * 0.60;
+            } else if (netSalary >= 50001 && netSalary <= 99999) {
+                eligibleSalaryPercent = netSalary * 0.65;
+            } else if (netSalary >= 100000 && netSalary <= 149999) {
+                eligibleSalaryPercent = netSalary * 0.70;
+            } else if (netSalary >= 150000 && netSalary <= 199999) {
+                eligibleSalaryPercent = netSalary * 0.75;
+            } else if (netSalary >= 200000) {
+                eligibleSalaryPercent = netSalary * 0.80;
+            } else {
+                document.getElementById('result').innerText = "Net Salary does not meet the minimum criteria.";
+                return;
+            }
+
+            // Step 2: Subtract Total Loan EMI from the eligible salary
+            let remainingAmount = eligibleSalaryPercent - totalLoanEMI;
+
+            // Step 3: Calculate and subtract 5% of total credit card outstanding
+            let creditCardDeduction = creditCardOutstanding * 0.05;
+            remainingAmount -= creditCardDeduction;
+
+            // Step 4: Multiply the final remaining amount by 40
+            let eligibilityAmount = remainingAmount * 40;
+
+            // Display the result
+            document.getElementById('result').innerText = "Customer Eligibility Amount: ₹" + eligibilityAmount.toFixed(2);
+        }
+    </script>
+</body>
+</html>
